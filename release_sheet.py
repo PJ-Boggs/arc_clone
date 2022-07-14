@@ -51,3 +51,30 @@ arcpy.management.CalculateField("Release_Sheet", "summary_ad", '!sub_buildi! + "
 # Remove/Replace zero values from Addresses
 arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '0 ', '')",
                                 "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Calculate Country - Default as NI, change when required
+arcpy.management.CalculateField("Release_Sheet", "country", "'NI'", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Remove Unnecessary Fields
+arcpy.management.DeleteField("Release_Sheet", "sub_buildi;building_n;building_1;street;town;postcode;"
+                                              "CreationDa;Creator;EditDate;Editor", "DELETE_FIELDS")
+
+# Calc Pop ID
+# Spatial Join (SJ) Pop Boundary with ReleaseSheet
+target_features = "Release_Sheet"
+join_features = "Pop_Boundary"
+out_feature_class = "Pop_SJ"
+
+arcpy.SpatialJoin_analysis(target_features, join_features, out_feature_class)
+
+# Add Join between ReleaseSheet and SJ
+pop_joined_table = arcpy.AddJoin_management("Release_Sheet", "OBJECTID",
+                                            "Pop_SJ", "TARGET_FID")
+arcpy.CopyFeatures_management(pop_joined_table, "popjoin")
+
+# # Calc Pop_ID Field from SJ
+# arcpy.management.CalculateField("Release_Sheet", "Release_Sheet.pop_id", "!Pop_SJ.name!", "PYTHON3",
+#                                 '', "TEXT", "NO_ENFORCE_DOMAINS")
+
+# # Remove Join
+# arcpy.management.RemoveJoin("Release_Sheet", "Pop_SJ")
+
+# NOTE TO SELF - Use spatial join layer as new output layer... work from the SJ Layer
