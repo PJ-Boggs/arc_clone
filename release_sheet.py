@@ -32,6 +32,7 @@ arcpy.management.AddFields("Release_Sheet",
                            "loc_desc TEXT 'Loc Description' 255 # #;"
                            "loc_type TEXT 'Loc Type' 255 # #")
 
+# Calc Geometry Fields
 arcpy.management.CalculateGeometryAttributes("Release_Sheet", "x POINT_X;y POINT_Y", '', '',
                                              'PROJCS["TM75_Irish_Grid",GEOGCS["GCS_TM75",DATUM'
                                              '["D_TM75",SPHEROID["Airy_Modified",6377340.189,299.3249646]],'
@@ -42,3 +43,11 @@ arcpy.management.CalculateGeometryAttributes("Release_Sheet", "x POINT_X;y POINT
                                              'UNIT["Meter",1.0]]', "SAME_AS_INPUT")
 
 arcpy.management.CalculateGeometryAttributes("Release_Sheet", "latitude POINT_Y;longitude POINT_X", '', '', None, "DD")
+
+# Calc Summary Address Field
+arcpy.management.CalculateField("Release_Sheet", "summary_ad", '!sub_buildi! + " " + !building_n! + " " + !building_1!'
+                                ' + " " + !street! + ", " + !town! + ", " + !postcode!', "PYTHON3", '',
+                                "TEXT", "NO_ENFORCE_DOMAINS")
+# Remove/Replace zero values from Addresses
+arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '0 ', '')",
+                                "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
