@@ -63,6 +63,8 @@ arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature
 
 # Calculate Country - Default as NI, change when required
 arcpy.management.CalculateField("Release_Sheet", "country", "'NI'", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Calculate Build_Status - Default as Planned (1), change when required
+arcpy.management.CalculateField("Release_Sheet", "build_status", "'1'", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
 # Remove Unnecessary Fields
 arcpy.management.DeleteField("Release_Sheet", "sub_buildi;building_n;building_1;street;town;postcode;"
                                               "CreationDa;Creator;EditDate;Editor", "DELETE_FIELDS")
