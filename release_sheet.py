@@ -28,12 +28,12 @@ arcpy.management.AddFields("Release_Sheet",
                            "structure_owner TEXT 'Structure Owner' 255 # #;"
                            "builddate DATE 'Build Date' 255 # #;"
                            "releasedate DATE 'Release to Sales Date' # # #;"
-                           "test_results TEXT 'Test Results' 255 # #;"
                            "zone TEXT Zone 255 # #;"
                            "pianoi TEXT PIANOI 255 # #;"
                            "build_status TEXT 'Build Status' 255 # #;"
                            "loc_desc TEXT 'Loc Description' 255 # #;"
-                           "loc_type TEXT 'Loc Type' 255 # #")
+                           "loc_type TEXT 'Loc Type' 255 # #;"
+                           "test_results TEXT 'Test Results' 255 # #")
 
 # Calc Geometry Fields
 arcpy.management.CalculateGeometryAttributes("Release_Sheet", "x POINT_X;y POINT_Y", '', '',
@@ -49,15 +49,17 @@ arcpy.management.CalculateGeometryAttributes("Release_Sheet", "latitude POINT_Y;
 
 # Calc Summary Address Field
 arcpy.management.CalculateField("Release_Sheet", "summary_ad", '!sub_buildi! + " " + !building_n! + " " + !building_1!'
-                                ' + " " + !street! + ", " + !town! + ", " + !postcode!', "PYTHON3", '',
+                                                               ' + " " + !street! + ", " + !town! + ", " + !postcode!',
+                                "PYTHON3", '',
                                 "TEXT", "NO_ENFORCE_DOMAINS")
 # Cleanse Address Information
 arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '0 ', '')",
                                 "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
 arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '       ,  ,  ',"
-                                " 'New Address')", "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
+                                                               " 'New Address')", "ARCADE", '', "TEXT",
+                                "NO_ENFORCE_DOMAINS")
 arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '  ',"
-                                "'')", "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
+                                                               "'')", "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
 
 # Calculate Country - Default as NI, change when required
 arcpy.management.CalculateField("Release_Sheet", "country", "'NI'", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
@@ -78,8 +80,8 @@ arcpy.management.CalculateField("Pop_SJ", "pop_id", "!name!", "PYTHON3", '', "TE
 arcpy.management.DeleteField("Pop_SJ", "Join_Count;TARGET_FID;id;level_;name;w_homes;g_homes;t_homes;loc_type_1;"
                                        "loc_desc_1;GlobalID_1;Shape__Are;Shape__Len", "DELETE_FIELDS")
 # Overwrite Release_Sheet with Pop_SJ
-arcpy.FeatureClassToFeatureClass_conversion("Pop_SJ", 
-                                            "C:/Users/pjbog/arc_clone/DATA/project.gdb", 
+arcpy.FeatureClassToFeatureClass_conversion("Pop_SJ",
+                                            "C:/Users/pjbog/arc_clone/DATA/project.gdb",
                                             "Release_Sheet")
 # Delete working Pop_SJ Feature Class
 arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Pop_SJ")
@@ -95,7 +97,7 @@ arcpy.SpatialJoin_analysis(target_features1, join_features1, out_feature_class1)
 arcpy.management.CalculateField("Jn_SJ", "PN", "!name!", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
 # Remove Unnecessary Fields
 arcpy.management.DeleteField("Jn_SJ", "Join_Count;TARGET_FID;id;level_;name;w_homes;g_homes;t_homes;loc_type_1;"
-                                       "loc_desc_1;GlobalID_1;Shape__Are;Shape__Len", "DELETE_FIELDS")
+                                      "loc_desc_1;GlobalID_1;Shape__Are;Shape__Len", "DELETE_FIELDS")
 # Overwrite Release_Sheet with Jn_SJ
 arcpy.FeatureClassToFeatureClass_conversion("Jn_SJ",
                                             "C:/Users/pjbog/arc_clone/DATA/project.gdb",
@@ -122,6 +124,46 @@ arcpy.FeatureClassToFeatureClass_conversion("Mpt_SJ",
 # Delete working Mpt_SJ Feature Class
 arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Mpt_SJ")
 
+# Calc PIANOI
+# Spatial Join (SJ) PIANOI Boundary with ReleaseSheet
+target_features3 = "Release_Sheet"
+join_features3 = "Noi_Boundaries"
+out_feature_class3 = "Noi_SJ"
+
+arcpy.SpatialJoin_analysis(target_features3, join_features3, out_feature_class3)
+# Calc Pianoi from piano
+arcpy.management.CalculateField("Noi_SJ", "pianoi", "!piano!", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Remove Unnecessary Fields
+arcpy.management.DeleteField("Noi_SJ", "Join_Count;TARGET_FID;id;noi;noi_no;piano;GlobalID_1;Shape__Are;Shape__Len",
+                             "DELETE_FIELDS")
+# Overwrite Release_Sheet with Noi_SJ
+arcpy.FeatureClassToFeatureClass_conversion("Noi_SJ",
+                                            "C:/Users/pjbog/arc_clone/DATA/project.gdb",
+                                            "Release_Sheet")
+# Delete working Noi_SJ Feature Class
+arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Noi_SJ")
+
+# Calc LOC
+# Spatial Join (SJ) Loc Boundary with ReleaseSheet
+target_features4 = "Release_Sheet"
+join_features4 = "Loc_Boundaries"
+out_feature_class4 = "Loc_SJ"
+
+arcpy.SpatialJoin_analysis(target_features4, join_features4, out_feature_class4)
+# Calc Loc_desc from Loc_desc
+arcpy.management.CalculateField("Loc_SJ", "loc_desc", "!loc_desc_1!", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Calc Loc_type from Loc_type
+arcpy.management.CalculateField("Loc_SJ", "loc_type", "!loc_type_1!", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Remove Unnecessary Fields
+arcpy.management.DeleteField("Loc_SJ", "Join_Count;TARGET_FID;id;level_;name;w_homes;g_homes;t_homes;loc_type_1;"
+                                       "loc_desc_1;GlobalID_1;Shape__Are;Shape__Len", "DELETE_FIELDS")
+# Overwrite Release_Sheet with Loc_SJ
+arcpy.FeatureClassToFeatureClass_conversion("Loc_SJ",
+                                            "C:/Users/pjbog/arc_clone/DATA/project.gdb",
+                                            "Release_Sheet")
+# Delete working Loc_SJ Feature Class
+arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Loc_SJ")
+
 # NOTE TO SELF - Add codded value domains at end
 
-# NOTE TO SELF - Create Function for removing Unnecessary fields
+# NOTE TO SELF - Create Function for Pop,PN,SN and Loc
