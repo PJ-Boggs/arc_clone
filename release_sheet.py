@@ -219,6 +219,16 @@ arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Structures")
 arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Dw_Str_SJ")
 arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Dw_Str_SJ2")
 
+# Assign Domains to Fields
+arcpy.AssignDomainToField_management("Release_Sheet",
+                                     "premise_ty", "premise_typ")
+arcpy.AssignDomainToField_management("Release_Sheet",
+                                     "feed_type", "feed_typ")
+arcpy.AssignDomainToField_management("Release_Sheet",
+                                     "build_status", "build_status")
+arcpy.AssignDomainToField_management("Release_Sheet",
+                                     "structure_owner", "owner")
+
 # NOTE TO SELF - Add codded value domains at end
 
 # NOTE TO SELF - Create Function for Pop,PN,SN and Loc
