@@ -51,9 +51,14 @@ arcpy.management.CalculateGeometryAttributes("Release_Sheet", "latitude POINT_Y;
 arcpy.management.CalculateField("Release_Sheet", "summary_ad", '!sub_buildi! + " " + !building_n! + " " + !building_1!'
                                 ' + " " + !street! + ", " + !town! + ", " + !postcode!', "PYTHON3", '',
                                 "TEXT", "NO_ENFORCE_DOMAINS")
-# Remove/Replace zero values from Addresses
+# Cleanse Address Information
 arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '0 ', '')",
                                 "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
+arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '       ,  ,  ',"
+                                " 'New Address')", "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
+arcpy.management.CalculateField("Release_Sheet", "summary_ad", "Replace($feature.summary_ad, '  ',"
+                                "'')", "ARCADE", '', "TEXT", "NO_ENFORCE_DOMAINS")
+
 # Calculate Country - Default as NI, change when required
 arcpy.management.CalculateField("Release_Sheet", "country", "'NI'", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
 # Remove Unnecessary Fields
