@@ -1,5 +1,8 @@
 import arcpy
 
+# Allow outputs to be overwritten
+arcpy.env.overwriteOutput = True
+
 # Set project fgdb as workspace
 workspace = "C:/Users/pjbog/arc_clone/DATA/project.gdb"
 arcpy.env.workspace = workspace
@@ -64,17 +67,14 @@ join_features = "Pop_Boundary"
 out_feature_class = "Pop_SJ"
 
 arcpy.SpatialJoin_analysis(target_features, join_features, out_feature_class)
-
-# Add Join between ReleaseSheet and SJ
-pop_joined_table = arcpy.AddJoin_management("Release_Sheet", "OBJECTID",
-                                            "Pop_SJ", "TARGET_FID")
-arcpy.CopyFeatures_management(pop_joined_table, "popjoin")
-
-# # Calc Pop_ID Field from SJ
-# arcpy.management.CalculateField("Release_Sheet", "Release_Sheet.pop_id", "!Pop_SJ.name!", "PYTHON3",
-#                                 '', "TEXT", "NO_ENFORCE_DOMAINS")
-
-# # Remove Join
-# arcpy.management.RemoveJoin("Release_Sheet", "Pop_SJ")
-
-# NOTE TO SELF - Use spatial join layer as new output layer... work from the SJ Layer
+# Calc Pop_ID from Name
+arcpy.management.CalculateField("Pop_SJ", "pop_id", "!name!", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Remove Unnecessary Fields
+arcpy.management.DeleteField("Pop_SJ", "Join_Count;TARGET_FID;id;level_;name;w_homes;g_homes;t_homes;loc_type_1;"
+                                       "loc_desc_1;GlobalID_1;Shape__Are;Shape__Len", "DELETE_FIELDS")
+# Overwrite Release_Sheet with Pop_SJ
+arcpy.FeatureClassToFeatureClass_conversion("Pop_SJ", 
+                                            "C:/Users/pjbog/arc_clone/DATA/project.gdb", 
+                                            "Release_Sheet")
+# Delete working Pop_SJ Feature Class
+arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Pop_SJ")
