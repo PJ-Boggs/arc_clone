@@ -83,3 +83,45 @@ arcpy.FeatureClassToFeatureClass_conversion("Pop_SJ",
                                             "Release_Sheet")
 # Delete working Pop_SJ Feature Class
 arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Pop_SJ")
+
+# Calc Primary Node
+# Spatial Join (SJ) JN Boundary with ReleaseSheet
+target_features1 = "Release_Sheet"
+join_features1 = "Jn_Boundaries"
+out_feature_class1 = "Jn_SJ"
+
+arcpy.SpatialJoin_analysis(target_features1, join_features1, out_feature_class1)
+# Calc PN_ID from Name
+arcpy.management.CalculateField("Jn_SJ", "PN", "!name!", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Remove Unnecessary Fields
+arcpy.management.DeleteField("Jn_SJ", "Join_Count;TARGET_FID;id;level_;name;w_homes;g_homes;t_homes;loc_type_1;"
+                                       "loc_desc_1;GlobalID_1;Shape__Are;Shape__Len", "DELETE_FIELDS")
+# Overwrite Release_Sheet with Jn_SJ
+arcpy.FeatureClassToFeatureClass_conversion("Jn_SJ",
+                                            "C:/Users/pjbog/arc_clone/DATA/project.gdb",
+                                            "Release_Sheet")
+# Delete working Jn_SJ Feature Class
+arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Jn_SJ")
+
+# Calc Secondary Node
+# Spatial Join (SJ) MPT Boundary with ReleaseSheet
+target_features2 = "Release_Sheet"
+join_features2 = "Mpt_Boundaries"
+out_feature_class2 = "Mpt_SJ"
+
+arcpy.SpatialJoin_analysis(target_features2, join_features2, out_feature_class2)
+# Calc SN_ID from Name
+arcpy.management.CalculateField("Mpt_SJ", "SN", "!name!", "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")
+# Remove Unnecessary Fields
+arcpy.management.DeleteField("Mpt_SJ", "Join_Count;TARGET_FID;id;level_;name;w_homes;g_homes;t_homes;loc_type_1;"
+                                       "loc_desc_1;GlobalID_1;Shape__Are;Shape__Len", "DELETE_FIELDS")
+# Overwrite Release_Sheet with Mpt_SJ
+arcpy.FeatureClassToFeatureClass_conversion("Mpt_SJ",
+                                            "C:/Users/pjbog/arc_clone/DATA/project.gdb",
+                                            "Release_Sheet")
+# Delete working Mpt_SJ Feature Class
+arcpy.Delete_management(r"C:/Users/pjbog/arc_clone/DATA/project.gdb/Mpt_SJ")
+
+# NOTE TO SELF - Add codded value domains at end
+
+# NOTE TO SELF - Create Function for removing Unnecessary fields
