@@ -1,4 +1,4 @@
-name: project
+name: arc_clone
 channels:
   - defaults
   - esri
