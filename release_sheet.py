@@ -229,6 +229,17 @@ arcpy.AssignDomainToField_management("Release_Sheet",
 arcpy.AssignDomainToField_management("Release_Sheet",
                                      "structure_owner", "owner")
 
-# NOTE TO SELF - Add codded value domains at end
+# QC for Nulls - Function
+arcpy.management.CalculateField("Release_Sheet", "test_results", "QC (!PN!,!SN!,!feed_type!,!pianoi!)", "PYTHON3",
+                                """def QC (PN,SN,feed_type,pianoi):
+    BlockList = [PN, SN, feed_type, pianoi]
+    mylist = []
+    for i in BlockList:
+        if i == None:
+            myList.append(i)
+    return 'APPROVED'
+    """, "TEXT", "NO_ENFORCE_DOMAINS")
 
-# NOTE TO SELF - Create Function for Pop,PN,SN and Loc
+# Export Feature Class Attribute Table to Excel (Stored in arc_clone Folder)
+arcpy.conversion.TableToExcel("Release_Sheet", r"C:\Users\pjbog\arc_clone\DATA\ReleaseSheet.xls",
+                              "ALIAS", "DESCRIPTION")
