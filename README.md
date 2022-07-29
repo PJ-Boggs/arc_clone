@@ -31,7 +31,7 @@ Python and Arcpy are the main dependencies to run the finalised script. In the e
 
 As the script was developed to carry out a very niche function, test data has been provided. Located within the ‘DATA’ folder in the GitHub repository. 
 
-## 3. Trouble Shooting
+## 3. **warning** Trouble Shooting **warning**
 
 > **As the script was developed using Arcpy 2.9, the code will not be compatible with hardware with earlier versions of ArcGIS installed. Therefore, to ensure the script runs smoothly, please ensure that the installed version of ArcGIS is 2.9 or later.**
 
