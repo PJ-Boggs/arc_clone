@@ -59,6 +59,8 @@ Conda env create -f environment.yml
 ```
 However, creating the environment in this way can cause further issues such as ‘Conda not recognised as internal or external command’. This error can be overcome by running ‘where conda’ within your anaconda prompt and adding the shown folder paths to your PATH environment variable under the advance system settings. Once added, follow the previous steps using the administrative command prompt to setup the required environment. 
 
+If further environment issues peruse, clone the python environment directly from ArcGIS. This can be carried out from ‘manage environments’ under the Python tab of the ArcGIS settings.
+
 For further error corrections and advice, please see the following forums for help revolving GitHub, GIS and Python.
 
 -	https://github.com/orgs/community/discussions/
