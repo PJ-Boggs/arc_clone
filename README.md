@@ -21,4 +21,6 @@ Further information on Viberoptic Ltd can be found [here](https://www.viberoptix
 
 ## 2. Setup and Installation:
 
-'''cd C:\Users\pjbog\arc_clone'''
+```
+cd C:\Users\pjbog\arc_clone
+```
