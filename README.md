@@ -34,5 +34,5 @@ dir
 
 ### Create environment using the environment.yml file 
 ```
-Conda enc create -f environment.yml
+Conda env create -f environment.yml
 ```
