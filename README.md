@@ -21,6 +21,18 @@ Further information on Viberoptic Ltd can be found [here](https://www.viberoptix
 
 ## 2. Setup and Installation:
 
+
+### Change Directory to folder path - changing 'C:\Users\pjbog\arc_clone' to your unique folder path
 ```
 cd C:\Users\pjbog\arc_clone
+```
+
+### View directoy, ensuring it contains the cloned repository folder and files
+```
+dir
+```
+
+### Create environment using the environment.yml file 
+```
+Conda enc create -f environment.yml
 ```
