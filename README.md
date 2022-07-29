@@ -28,7 +28,9 @@ For now, the script requires a minor change to run successfully. Once opened in 
 Python and Arcpy are the main dependencies to run the finalised script. In the environment.yml file, ‘notebook’ has also been listed as a dependency. However, this addition is intended to ease the process of future collaborated developments.  
 As the script was developed to carry out a very niche function, test data has been provided. Located within the ‘DATA’ folder in the GitHub repository. 
 
-> As the script was developed using Arcpy 2.9, the code will not be compatible with hardware with earlier versions of ArcGIS installed. Therefore, to ensure the script runs smoothly, please ensure that the installed version of ArcGIS is 2.9 or later.
+## 3. Trouble Shooting
+
+> **As the script was developed using Arcpy 2.9, the code will not be compatible with hardware with earlier versions of ArcGIS installed. Therefore, to ensure the script runs smoothly, please ensure that the installed version of ArcGIS is 2.9 or later.**
 
 With older version of ArcGIS, some tools may require their script to be re-written. To convert tool scripts to previous version please see https://pro.arcgis.com/en/pro-app/latest/tool-reference/main/arcgis-pro-tool-reference.htm
 
