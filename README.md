@@ -20,3 +20,5 @@ department, in the use and development of the script.
 Further information on Viberoptic Ltd can be found [here](https://www.viberoptix.com/).
 
 ## 2. Setup and Installation:
+
+'''cd C:\Users\pjbog\arc_clone'''
