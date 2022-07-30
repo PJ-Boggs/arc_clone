@@ -230,6 +230,12 @@ arcpy.AssignDomainToField_management("Release_Sheet",
                                      "structure_owner", "owner")
 
 # QC for Nulls - Function
+""" QC Function checks for null values, approving features without.
+
+Input parameters are the fields of the Release Sheet which are to be evaluated.
+The function outputs 'approved' values within the test_results field of the Release Sheet.
+
+"""
 arcpy.management.CalculateField("Release_Sheet", "test_results", "QC (!PN!,!SN!,!feed_type!,!pianoi!)", "PYTHON3",
                                 """def QC (PN,SN,feed_type,pianoi):
     BlockList = [PN, SN, feed_type, pianoi]
